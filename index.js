@@ -1,32 +1,15 @@
-const express = require('express');
-const bodyParser = require('body-parser')
-const app = express()
-const port = process.env.PORT || 3002
 
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+const mongoose = require('mongoose')
+const app = require('./app')
+const config = require('./config/config')
 
-app.get('/api/product', (req, res) => {
-    res.status(200).send({ products: [] })
+mongoose.connect(config.db, (err, res) => {
+    if (err) {
+        return console.log(`Error al conectar a la base de datos: ${err}`)
+    }
+    console.log('Conexión a la base de datos establecida...')
 
-})
-
-app.get('/api/product/:productId', (req, res) => {
-
-})
-
-app.post('/api/product', (req, res) => {
-    console.log(req.body)
-    res.status(200).send({ message: 'el product recibido' })
-})
-
-app.put('/api/product/productId', (req, res) => {
-
-})
-
-app.delete('/api/product/:productId', (req, res) => {
-
-})
-app.listen(port, () => {
-    console.log(`Servidor corriendo en port ${port}`)
+    app.listen(config.port, () => {
+        console.log(`API REST corriendo en http://localhost:${config.port}`)
+    })
 })
